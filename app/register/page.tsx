@@ -46,37 +46,44 @@ export default function RegisterPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const e2 = validate();
-    if (Object.keys(e2).length > 0) {
-      setErrors(e2);
-      return;
-    }
+    const errs = validate();
+    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setErrors({});
     setStatus("loading");
-    const { error } = await supabase.from("seniors").insert({
-      name: form.name.trim(),
-      region: form.region,
-      desired_job: form.desired_job,
-      career_years: form.career_years ? parseInt(form.career_years) : 0,
-    });
-    if (error) {
+
+    const { data, error } = await supabase
+      .from("seniors")
+      .insert({
+        name: form.name.trim(),
+        region: form.region,
+        desired_job: form.desired_job,
+        career_years: form.career_years ? parseInt(form.career_years) : 0,
+      })
+      .select("id")
+      .single();
+
+    if (error || !data) {
       setStatus("error");
-    } else {
-      setStatus("success");
-      setForm({ name: "", region: "", desired_job: "", career_years: "" });
+      return;
     }
+
+    // 매칭 재계산 (Supabase RPC)
+    await supabase.rpc("recalculate_matches_for_senior", { p_senior_id: data.id });
+
+    setStatus("success");
+    setForm({ name: "", region: "", desired_job: "", career_years: "" });
   }
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
       <h1 className="text-4xl font-bold text-gray-900 mb-2">시니어 프로필 등록</h1>
       <p className="text-xl text-gray-500 mb-10">
-        아래 정보를 입력하시면 맞춤 일자리를 추천해 드립니다.
+        아래 정보를 입력하시면 맞춤 일자리를 자동으로 추천해 드립니다.
       </p>
 
       {status === "success" && (
         <div className="mb-8 rounded-xl border-2 border-green-500 bg-green-50 px-6 py-4 text-xl font-semibold text-green-800">
-          ✅ 등록이 완료되었습니다.
+          ✅ 등록이 완료되었습니다. 매칭이 자동으로 계산되었습니다.
         </div>
       )}
       {status === "error" && (
@@ -91,7 +98,6 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-
             {/* 이름 */}
             <div className="flex flex-col gap-2">
               <Label htmlFor="name" className="text-xl font-semibold text-gray-700">
@@ -114,7 +120,7 @@ export default function RegisterPage() {
 
             {/* 지역 */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="region" className="text-xl font-semibold text-gray-700">
+              <Label className="text-xl font-semibold text-gray-700">
                 거주 지역 <span className="text-red-500">*</span>
               </Label>
               {errors.region && (
@@ -122,18 +128,13 @@ export default function RegisterPage() {
                   {errors.region}
                 </p>
               )}
-              <Select
-                value={form.region}
-                onValueChange={(v) => setForm({ ...form, region: v })}
-              >
+              <Select value={form.region} onValueChange={(v) => setForm({ ...form, region: v })}>
                 <SelectTrigger className="h-14 text-xl border-2 border-gray-300 rounded-lg">
                   <SelectValue placeholder="지역을 선택해 주세요" />
                 </SelectTrigger>
                 <SelectContent>
                   {REGIONS.map((r) => (
-                    <SelectItem key={r} value={r} className="text-xl py-3">
-                      {r}
-                    </SelectItem>
+                    <SelectItem key={r} value={r} className="text-xl py-3">{r}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -141,7 +142,7 @@ export default function RegisterPage() {
 
             {/* 희망 직종 */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="desired_job" className="text-xl font-semibold text-gray-700">
+              <Label className="text-xl font-semibold text-gray-700">
                 희망 직종 <span className="text-red-500">*</span>
               </Label>
               {errors.desired_job && (
@@ -149,18 +150,13 @@ export default function RegisterPage() {
                   {errors.desired_job}
                 </p>
               )}
-              <Select
-                value={form.desired_job}
-                onValueChange={(v) => setForm({ ...form, desired_job: v })}
-              >
+              <Select value={form.desired_job} onValueChange={(v) => setForm({ ...form, desired_job: v })}>
                 <SelectTrigger className="h-14 text-xl border-2 border-gray-300 rounded-lg">
                   <SelectValue placeholder="직종을 선택해 주세요" />
                 </SelectTrigger>
                 <SelectContent>
                   {JOBS.map((j) => (
-                    <SelectItem key={j} value={j} className="text-xl py-3">
-                      {j}
-                    </SelectItem>
+                    <SelectItem key={j} value={j} className="text-xl py-3">{j}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -187,7 +183,7 @@ export default function RegisterPage() {
               disabled={status === "loading"}
               className="h-16 text-2xl font-bold bg-gray-900 hover:bg-gray-700 text-white rounded-xl mt-2"
             >
-              {status === "loading" ? "저장 중…" : "등록하기"}
+              {status === "loading" ? "저장 및 매칭 계산 중…" : "등록하기"}
             </Button>
           </form>
         </CardContent>
