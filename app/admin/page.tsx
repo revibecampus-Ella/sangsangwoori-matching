@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { AlertTriangle, Clock, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -157,12 +158,13 @@ export default function AdminPage() {
       {/* ── 집계 카드 3개 ── */}
       <div className="grid grid-cols-3 gap-6 mb-10">
         {[
-          { label: "미매칭 시니어", count: unmatchedCount, color: "bg-red-100 border-red-300", num: "bg-red-600 text-white" },
-          { label: "매칭 대기",     count: pendingCount,   color: "bg-yellow-100 border-yellow-300", num: "bg-yellow-500 text-white" },
-          { label: "배정 완료",     count: assignedCount,  color: "bg-green-100 border-green-300", num: "bg-green-600 text-white" },
+          { label: "미매칭 시니어", count: unmatchedCount, color: "bg-red-100 border-red-300",       num: "bg-red-600 text-white",    Icon: AlertTriangle,  iconColor: "text-red-500" },
+          { label: "매칭 대기",     count: pendingCount,   color: "bg-yellow-100 border-yellow-300", num: "bg-yellow-500 text-white", Icon: Clock,          iconColor: "text-yellow-500" },
+          { label: "배정 완료",     count: assignedCount,  color: "bg-green-100 border-green-300",   num: "bg-green-600 text-white",  Icon: CheckCircle2,   iconColor: "text-green-600" },
         ].map((c) => (
           <Card key={c.label} className={`border-2 ${c.color} shadow-sm`}>
             <CardContent className="flex flex-col items-center py-8">
+              <c.Icon className={`w-10 h-10 mb-2 ${c.iconColor}`} />
               <p className="text-xl font-semibold text-gray-700 mb-3">{c.label}</p>
               <span className={`text-5xl font-bold px-6 py-2 rounded-xl ${c.num}`}>{c.count}</span>
               <p className="text-lg text-gray-500 mt-3">명</p>

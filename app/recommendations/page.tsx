@@ -37,9 +37,10 @@ function scoreBadge(score: number) {
 }
 
 function scoreLabel(score: number) {
-  if (score === 6) return "⭐ 최적 매칭";
-  if (score >= 4) return "✅ 적합";
-  return "보통";
+  if (score === 6) return "매우 적합";
+  if (score >= 4) return "적합";
+  if (score >= 2) return "보통";
+  return "";
 }
 
 function RecommendationsContent() {
@@ -94,13 +95,15 @@ function RecommendationsContent() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
-      <h1 className="text-4xl font-bold text-gray-900 mb-2">자동 매칭 추천 목록</h1>
+      <h1 className="text-5xl font-bold text-gray-900 mb-3">
+        {senior ? `${senior.name} 님께 맞는 일자리` : "맞춤 일자리 추천"}
+      </h1>
 
       {senior && (
-        <p className="text-xl text-gray-500 mb-10">
-          <span className="font-bold text-gray-900">{senior.name}</span> 님
-          &nbsp;({senior.region} · {senior.desired_job} · 경력 {senior.career_years}년)
-          의 추천 일자리입니다.
+        <p className="text-xl text-gray-600 mb-10">
+          지역: <span className="font-semibold text-gray-900">{senior.region}</span>
+          &nbsp;·&nbsp;직종: <span className="font-semibold text-gray-900">{senior.desired_job}</span>
+          &nbsp;·&nbsp;경력: <span className="font-semibold text-gray-900">{senior.career_years}년</span>
         </p>
       )}
 
@@ -110,11 +113,14 @@ function RecommendationsContent() {
 
       {!loading && matches.length === 0 && (
         <div className="rounded-xl border-2 border-gray-300 bg-gray-50 px-6 py-10 text-center">
-          <p className="text-2xl font-semibold text-gray-600 mb-2">
+          <p className="text-2xl font-semibold text-gray-700 mb-3">
             현재 매칭되는 일자리가 없습니다
           </p>
-          <p className="text-xl text-gray-400">
-            일자리가 등록되거나 프로필이 변경되면 자동으로 재매칭됩니다.
+          <p className="text-xl text-gray-500 mb-1">
+            담당자가 직접 연락드리니 잠시만 기다려 주세요.
+          </p>
+          <p className="text-lg text-gray-400">
+            새 일자리가 등록되면 자동으로 재매칭됩니다.
           </p>
         </div>
       )}
@@ -128,8 +134,10 @@ function RecommendationsContent() {
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between gap-4">
                 <CardTitle className="text-2xl text-gray-900">{m.jobs.title}</CardTitle>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-lg text-gray-500">{scoreLabel(m.score)}</span>
+                <div className="flex items-center gap-3 shrink-0">
+                  {scoreLabel(m.score) && (
+                    <span className="text-lg font-medium text-gray-500">{scoreLabel(m.score)}</span>
+                  )}
                   <span
                     className={`text-2xl font-bold px-4 py-1 rounded-full ${scoreBadge(m.score)}`}
                   >

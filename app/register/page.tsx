@@ -76,31 +76,32 @@ export default function RegisterPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
-      <h1 className="text-4xl font-bold text-gray-900 mb-2">시니어 프로필 등록</h1>
-      <p className="text-xl text-gray-500 mb-10">
-        아래 정보를 입력하시면 맞춤 일자리를 자동으로 추천해 드립니다.
+      <h1 className="text-5xl font-bold text-gray-900 mb-3">시니어 일자리 신청하기</h1>
+      <p className="text-xl text-gray-600 mb-10">
+        아래 정보를 입력해 주시면 담당자가 맞춤 일자리를 안내해 드립니다.
       </p>
 
       {status === "success" && (
-        <div className="mb-8 rounded-xl border-2 border-green-500 bg-green-50 px-6 py-4 text-xl font-semibold text-green-800">
-          ✅ 등록이 완료되었습니다. 매칭이 자동으로 계산되었습니다.
+        <div className="mb-8 rounded-xl border-2 border-green-500 bg-green-50 px-6 py-5 text-xl font-semibold text-green-800">
+          ✅ 등록이 완료되었습니다. 담당자가 곧 연락드립니다.
         </div>
       )}
       {status === "error" && (
-        <div className="mb-8 rounded-xl border-2 border-red-400 bg-red-50 px-6 py-4 text-xl font-semibold text-red-800">
+        <div className="mb-8 rounded-xl border-2 border-red-400 bg-red-50 px-6 py-5 text-xl font-semibold text-red-800">
           ❌ 저장 중 오류가 발생했습니다. 다시 시도해 주세요.
         </div>
       )}
 
-      <Card className="border-2 border-gray-200 shadow-sm">
+      <Card className="border-2 border-gray-200 shadow-md">
         <CardHeader>
-          <CardTitle className="text-2xl text-gray-800">기본 정보</CardTitle>
+          <CardTitle className="text-2xl text-gray-800">기본 정보를 입력해 주세요</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-8">
             {/* 이름 */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="name" className="text-xl font-semibold text-gray-700">
+              <p className="text-lg text-gray-500">성함이 어떻게 되세요?</p>
+              <Label htmlFor="name" className="text-xl font-semibold text-gray-800">
                 이름 <span className="text-red-500">*</span>
               </Label>
               {errors.name && (
@@ -120,7 +121,8 @@ export default function RegisterPage() {
 
             {/* 지역 */}
             <div className="flex flex-col gap-2">
-              <Label className="text-xl font-semibold text-gray-700">
+              <p className="text-lg text-gray-500">어디에서 일하고 싶으세요?</p>
+              <Label className="text-xl font-semibold text-gray-800">
                 거주 지역 <span className="text-red-500">*</span>
               </Label>
               {errors.region && (
@@ -142,7 +144,8 @@ export default function RegisterPage() {
 
             {/* 희망 직종 */}
             <div className="flex flex-col gap-2">
-              <Label className="text-xl font-semibold text-gray-700">
+              <p className="text-lg text-gray-500">어떤 일을 하시겠어요?</p>
+              <Label className="text-xl font-semibold text-gray-800">
                 희망 직종 <span className="text-red-500">*</span>
               </Label>
               {errors.desired_job && (
@@ -164,7 +167,8 @@ export default function RegisterPage() {
 
             {/* 경력 */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="career_years" className="text-xl font-semibold text-gray-700">
+              <p className="text-lg text-gray-500">일하신 경험이 몇 년이나 되세요? (없으시면 0)</p>
+              <Label htmlFor="career_years" className="text-xl font-semibold text-gray-800">
                 경력 (년)
               </Label>
               <Input
@@ -183,7 +187,7 @@ export default function RegisterPage() {
               disabled={status === "loading"}
               className="h-16 text-2xl font-bold bg-gray-900 hover:bg-gray-700 text-white rounded-xl mt-2"
             >
-              {status === "loading" ? "저장 및 매칭 계산 중…" : "등록하기"}
+              {status === "loading" ? "저장 중…" : "신청하기"}
             </Button>
           </form>
         </CardContent>
