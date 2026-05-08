@@ -281,7 +281,7 @@ export default function AdminPage() {
                 {errors.region && (
                   <p className="rounded-lg bg-red-50 border border-red-400 px-4 py-2 text-lg text-red-700">{errors.region}</p>
                 )}
-                <Select value={form.region} onValueChange={(v) => setForm({ ...form, region: v })}>
+                <Select value={form.region} onValueChange={(v) => setForm({ ...form, region: v ?? "" })}>
                   <SelectTrigger className="h-14 text-xl border-2 border-gray-300 rounded-lg">
                     <SelectValue placeholder="지역 선택" />
                   </SelectTrigger>
@@ -300,7 +300,7 @@ export default function AdminPage() {
                 {errors.job_type && (
                   <p className="rounded-lg bg-red-50 border border-red-400 px-4 py-2 text-lg text-red-700">{errors.job_type}</p>
                 )}
-                <Select value={form.job_type} onValueChange={(v) => setForm({ ...form, job_type: v })}>
+                <Select value={form.job_type} onValueChange={(v) => setForm({ ...form, job_type: v ?? "" })}>
                   <SelectTrigger className="h-14 text-xl border-2 border-gray-300 rounded-lg">
                     <SelectValue placeholder="직종 선택" />
                   </SelectTrigger>

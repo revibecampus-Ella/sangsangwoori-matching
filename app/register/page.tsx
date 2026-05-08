@@ -130,7 +130,7 @@ export default function RegisterPage() {
                   {errors.region}
                 </p>
               )}
-              <Select value={form.region} onValueChange={(v) => setForm({ ...form, region: v })}>
+              <Select value={form.region} onValueChange={(v) => setForm({ ...form, region: v ?? "" })}>
                 <SelectTrigger className="h-14 text-xl border-2 border-gray-300 rounded-lg">
                   <SelectValue placeholder="지역을 선택해 주세요" />
                 </SelectTrigger>
@@ -153,7 +153,7 @@ export default function RegisterPage() {
                   {errors.desired_job}
                 </p>
               )}
-              <Select value={form.desired_job} onValueChange={(v) => setForm({ ...form, desired_job: v })}>
+              <Select value={form.desired_job} onValueChange={(v) => setForm({ ...form, desired_job: v ?? "" })}>
                 <SelectTrigger className="h-14 text-xl border-2 border-gray-300 rounded-lg">
                   <SelectValue placeholder="직종을 선택해 주세요" />
                 </SelectTrigger>
