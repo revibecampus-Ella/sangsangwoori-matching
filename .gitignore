@@ -47,3 +47,7 @@ next-env.d.ts
 # screenshot artifacts
 *.png
 *.jpg
+!public/*.png
+!public/*.jpg
+
+.vercel
