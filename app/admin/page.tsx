@@ -91,9 +91,9 @@ export default function AdminPage() {
 
   async function fetchAll() {
     const [{ data: s }, { data: m }, { data: j }] = await Promise.all([
-      supabase.from("seniors").select("*").order("created_at", { ascending: false }),
+      supabase.from("seniors").select("*").order("name", { ascending: true }),
       supabase.from("matches").select("senior_id, score, status"),
-      supabase.from("jobs").select("*").order("created_at", { ascending: false }),
+      supabase.from("jobs").select("*").order("title", { ascending: true }),
     ]);
     setSeniors(s ?? []);
     setMatches(m ?? []);
@@ -177,7 +177,7 @@ export default function AdminPage() {
       <Card className="border-2 border-gray-200 shadow-sm mb-16">
         <CardHeader>
           <CardTitle className="text-2xl text-gray-800">
-            시니어 목록 ({seniors.length}명)
+            시니어 목록 ({seniors.length}명) 가나다순
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -340,7 +340,7 @@ export default function AdminPage() {
       <Card className="border-2 border-gray-200 shadow-sm">
         <CardHeader>
           <CardTitle className="text-2xl text-gray-800">
-            등록된 일자리 ({jobs.length}건)
+            등록된 일자리 ({jobs.length}건) 가나다순
           </CardTitle>
         </CardHeader>
         <CardContent>
